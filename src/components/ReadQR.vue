@@ -40,7 +40,7 @@ export default {
               canvas.width,
               canvas.height
             ).data;
-            console.log(imageData);
+
             const templateOption = {
               imageData,
               width: this.width,
@@ -55,9 +55,7 @@ export default {
 
     const readQRCode = ({ imageData, width, height }) => {
       const code = jsQR(imageData, width, height);
-      console.log(code);
       if (code) {
-        console.log("Found QR code", code);
         if (isUrl(code.data)) {
           if (
             window.confirm(
