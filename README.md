@@ -1,5 +1,7 @@
 # openqr
 
+https://openqr.netlify.app/
+
 ## Project setup
 ```
 yarn install
