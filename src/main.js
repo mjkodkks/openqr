@@ -2,5 +2,10 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import jsQR from "jsqr";
 
-createApp(App).use(store).use(router).mount('#app')
+const app = createApp(App)
+// install any js lib
+app.provide('jsQR', jsQR)
+// init app to #app
+app.use(store).use(router).mount('#app')
