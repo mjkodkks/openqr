@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import jsQR from "jsqr";
+import 'windi.css'
 
 const app = createApp(App)
 // install any js lib

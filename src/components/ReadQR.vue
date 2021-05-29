@@ -1,21 +1,45 @@
 <template>
-  <div class="layout">
-    <input type="file" @change="uploadImg" />
-    <img class="img" :src="file" alt="" srcset="" />
-    <a :href="link">{{ link }}</a>
+  <div class="h-100vh flex flex-col items-center justify-center p-8">
+    <div class="mb-4 text-green-500 text-xl">Open QR</div>
+    <div class="border-dark-800 border-width-2px border-dashed hover:border-green-400 
+    :hover:bg-green-400 p-3 transition-all duration-500"
+      :class="[file !== null ? 'w-auto h-auto': 'w-full h-full']"
+    >
+      <div class="flex justify-center items-center h-full cursor-pointer" 
+      @click.stop="handdleClickUpload"
+      >
+         <div v-show="file === null">Click to upload your image qrcode</div>
+         <img v-show="file !== null" class="img" :src="file" alt="alt image" srcset="" />
+      </div>
+    </div>
+    <input ref="uploadinput" class="hidden" type="file" @change="uploadImg" />
+    <div class="inline-block mt-4">
+      <a v-if="link" :href="link">{{ link }}</a>
+      <button v-if="link" @click="copyText" class="ml-2 :hover:transform-gpu :hover:scale-75">📑</button>
+    </div>
+    
+    <input class="hidden" type="text" name="copy" ref="textToCopy" v-model="link">
   </div>
+  <!-- <button @click="setOpen(true)">open dialog</button> -->
 </template>
 
 <script>
 import { ref, inject } from "vue";
 import { isUrl } from "../utills/isUrl";
+import useDialog from "../module/dialogConfirm";
 
 export default {
   name: "ReadQR",
+  components: {},
   setup() {
     const jsQR = inject("jsQR");
+    const { setOpen } = useDialog(); 
+
     let file = ref(null);
     let link = ref(null);
+
+    const uploadinput = ref(null)
+    let textToCopy = ref("")
 
     const uploadImg = (input) => {
       if (input.target.files && input.target.files[0]) {
@@ -46,7 +70,8 @@ export default {
               width: this.width,
               height: this.height,
             };
-            readQRCode(templateOption);
+            const readResult = readQRCode(templateOption);
+            openDialog(readResult);
           };
         };
         reader.readAsDataURL(fileCurrent);
@@ -54,27 +79,50 @@ export default {
     };
 
     const readQRCode = ({ imageData, width, height }) => {
-      const code = jsQR(imageData, width, height);
-      if (code) {
-        if (isUrl(code.data)) {
+      return jsQR(imageData, width, height);
+    };
+
+    const openDialog = async (resultRead) => {
+      if (resultRead) {
+        if (isUrl(resultRead.data)) {
           if (
             window.confirm(
-              `We found link ${code.data}. Do you want to open this link?`
+              `We found link ${resultRead.data}. Do you want to open this link?`
             )
           ) {
-            link.value = code.data;
-            setTimeout(() => window.open(code.data, "_blank"), 1000);
+            link.value = resultRead.data;
+            setTimeout(() => window.open(resultRead.data, "_blank"), 1000);
           } else {
+            link.value = resultRead.data;
             return;
           }
         } else {
           link.value = null;
-          window.alert(`${code.data}`);
+          window.alert(`${resultRead.data}`);
         }
       }
     };
 
-    return { file, uploadImg, link };
+    const handdleClickUpload = ()=> {
+      uploadinput.value.click()
+    }
+
+    const copyText = ()=> {
+      textToCopy.value.select();
+      document.execCommand("copy");
+      window.alert(`copy !!`)
+    }
+
+    return {
+      copyText,
+      textToCopy,
+      uploadinput,
+      handdleClickUpload,
+      setOpen,
+      file,
+      uploadImg,
+      link,
+    };
   },
 };
 </script>
@@ -99,10 +147,5 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.img {
-      width: 200px;
-    padding: 20px;
 }
 </style>
