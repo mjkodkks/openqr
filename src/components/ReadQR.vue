@@ -13,33 +13,34 @@
       </div>
     </div>
     <input ref="uploadinput" class="hidden" type="file" @change="uploadImg" />
-    <div class="inline-block mt-4">
-      <a v-if="link" :href="link">{{ link }}</a>
-      <button v-if="link" @click="copyText" class="ml-2 :hover:transform-gpu :hover:scale-75">📑</button>
+    <div class="inline-block mt-4" v-if="link">
+      <a :href="link">{{ link }}</a>
+      <div class="m-1">Or</div>
+      <button @click="copyText" class="ml-2 :hover:transform-gpu :hover:scale-75 font-bold">COPY 📑</button>
     </div>
     
-    <input class="hidden" type="text" name="copy" ref="textToCopy" v-model="link">
+    <input class="opacity-0" type="text" name="copy" ref="textToCopy" v-model="link">
   </div>
   <!-- <button @click="setOpen(true)">open dialog</button> -->
 </template>
 
 <script>
-import { ref, inject } from "vue";
+import { ref } from "vue";
 import { isUrl } from "../utills/isUrl";
+import { readQRCode } from "../utills/readQRCode";
 import useDialog from "../module/dialogConfirm";
 
 export default {
   name: "ReadQR",
   components: {},
   setup() {
-    const jsQR = inject("jsQR");
     const { setOpen } = useDialog(); 
 
     let file = ref(null);
     let link = ref(null);
 
     const uploadinput = ref(null)
-    let textToCopy = ref("")
+    let textToCopy = ref(null)
 
     const uploadImg = (input) => {
       if (input.target.files && input.target.files[0]) {
@@ -78,10 +79,6 @@ export default {
       }
     };
 
-    const readQRCode = ({ imageData, width, height }) => {
-      return jsQR(imageData, width, height);
-    };
-
     const openDialog = async (resultRead) => {
       if (resultRead) {
         if (isUrl(resultRead.data)) {
@@ -110,7 +107,7 @@ export default {
     const copyText = ()=> {
       textToCopy.value.select();
       document.execCommand("copy");
-      window.alert(`copy !!`)
+      window.alert(`Copy 😋`);
     }
 
     return {
