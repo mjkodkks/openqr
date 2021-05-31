@@ -20,8 +20,8 @@
     </div>
     
     <input class="opacity-0" type="text" name="copy" ref="textToCopy" v-model="link">
+    <Footer />
   </div>
-  <!-- <button @click="setOpen(true)">open dialog</button> -->
 </template>
 
 <script>
@@ -29,10 +29,13 @@ import { ref } from "vue";
 import { isUrl } from "../utills/isUrl";
 import { readQRCode } from "../utills/readQRCode";
 import useDialog from "../module/dialogConfirm";
+import Footer from "./Footer"
 
 export default {
   name: "ReadQR",
-  components: {},
+  components: {
+    Footer
+  },
   setup() {
     const { setOpen } = useDialog(); 
 
