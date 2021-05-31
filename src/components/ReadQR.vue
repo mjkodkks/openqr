@@ -1,6 +1,6 @@
 <template>
   <div class="h-100vh flex flex-col items-center justify-center p-8">
-    <div class="mb-4 text-green-500 text-xl">Open QR</div>
+    <div class="mb-4 text-green-500 text-xl flex items-center"><img src="@/assets/logo-mini.png" class="mr-2" alt="logo"> Open QR</div>
     <div class="border-dark-800 border-width-2px border-dashed hover:border-green-400 
     :hover:bg-green-400 p-3 transition-all duration-500"
       :class="[file !== null ? 'w-auto h-auto': 'w-full h-full']"
