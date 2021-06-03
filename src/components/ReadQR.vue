@@ -30,6 +30,7 @@ import { isUrl } from "../utills/isUrl";
 import { readQRCode } from "../utills/readQRCode";
 import useDialog from "../module/dialogConfirm";
 import Footer from "./Footer"
+import { isImage } from "../utills/checkFile"
 
 export default {
   name: "ReadQR",
@@ -48,6 +49,12 @@ export default {
     const uploadImg = (input) => {
       if (input.target.files && input.target.files[0]) {
         let fileCurrent = input.target.files[0];
+        
+        if(!isImage(fileCurrent)) {
+          alert(`Accept only image file such as .png .jpg`);
+          return
+        }
+
         let reader = new FileReader();
         reader.onload = function (e) {
           file.value = e.target.result;
@@ -100,6 +107,8 @@ export default {
           link.value = null;
           window.alert(`${resultRead.data}`);
         }
+      } else {
+        window.alert('Not found any qr code ')
       }
     };
 
