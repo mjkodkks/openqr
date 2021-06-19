@@ -4,18 +4,22 @@
       @switched="onSwitched"
       v-bind:initialState="isDarkModeEnabled"
     />
+    <DialogConfirm />
     <router-view />
   </div>
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
+import { onMounted, provide, ref } from "vue";
 import DarkModeSwitch from "./components/DankModeSwitch";
+import storeDialog from '@/storesimple/dialogConfirm'
+import DialogConfirm from './components/DialogConfirm.vue';
 export default {
   name: "App",
-  components: { DarkModeSwitch },
+  components: { DarkModeSwitch, DialogConfirm },
   setup() {
     let isDarkModeEnabled = ref(false);
+    provide('storeDialog', storeDialog)
 
     onMounted(() => {
       if (localStorage.getItem("nightMode") === null) {

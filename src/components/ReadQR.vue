@@ -31,10 +31,9 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { inject, ref } from "vue";
 import { isUrl } from "../utills/isUrl";
 import { readQRCode } from "../utills/readQRCode";
-import useDialog from "../module/dialogConfirm";
 import Footer from "./Footer"
 import { isImage } from "../utills/checkFile"
 
@@ -44,7 +43,7 @@ export default {
     Footer
   },
   setup() {
-    const { setOpen } = useDialog(); 
+    const storeDialog = inject('storeDialog')
 
     let file = ref(null);
     let link = ref(null);
@@ -98,11 +97,13 @@ export default {
     const openDialog = async (resultRead) => {
       if (resultRead) {
         if (isUrl(resultRead.data)) {
-          if (
-            window.confirm(
-              `We found link ${resultRead.data}. Do you want to open this link?`
-            )
-          ) {
+          const resuleDialog = await storeDialog.methods.setOpen(
+            {
+              title: 'Found Link',
+              description: `We found link ${resultRead.data}. Do you want to open this link?`
+            }
+          )
+          if (resuleDialog) {
             link.value = resultRead.data;
             setTimeout(() => window.open(resultRead.data, "_blank"), 1000);
           } else {
@@ -129,7 +130,9 @@ export default {
     }
 
     const clear = ()=> {
+      uploadinput.value.value = null
       file.value = null
+      link.value = null
     }
 
     return {
@@ -138,7 +141,7 @@ export default {
       textToCopy,
       uploadinput,
       handdleClickUpload,
-      setOpen,
+      storeDialog,
       file,
       uploadImg,
       link,

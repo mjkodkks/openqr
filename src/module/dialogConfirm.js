@@ -10,7 +10,6 @@ let rejectPromise = ref(undefined)
 export default function userDialog() {
 
     const setOpen = (option) => {
-        console.log(option)
         isOpen.value = true;
         title.value = option.title
         description.value = option.description
