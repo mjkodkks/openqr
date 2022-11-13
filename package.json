@@ -1,33 +1,25 @@
 {
-  "name": "openqr",
-  "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@7.9.0",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
-  },
-  "dependencies": {
-    "core-js": "^3.6.5",
-    "js-base64": "^3.6.1",
-    "jsqr": "^1.4.0",
-    "vue": "^3.0.0",
-    "vue-gtag-next": "^1.14.0",
-    "vue-router": "^4.0.0-0",
-    "vuex": "^4.0.0-0"
+    "build": "nuxi build",
+    "dev": "nuxi dev",
+    "start": "node .output/server/index.mjs",
+    "lint": "eslint .",
+    "postinstall": "nuxi prepare",
+    "generate": "nuxi generate"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-plugin-router": "~4.5.0",
-    "@vue/cli-plugin-vuex": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^7.0.0",
-    "sass": "^1.26.5",
-    "sass-loader": "^8.0.2",
-    "vue-cli-plugin-windicss": "~0.3.0"
+    "@antfu/eslint-config": "^0.27.0",
+    "@iconify-json/carbon": "^1.1.8",
+    "@iconify-json/twemoji": "^1.1.5",
+    "@nuxtjs/color-mode": "^3.1.6",
+    "@pinia/nuxt": "^0.4.2",
+    "@unocss/nuxt": "^0.45.25",
+    "@vueuse/nuxt": "^9.3.0",
+    "eslint": "^8.24.0",
+    "nuxt": "3.0.0-rc.13",
+    "pinia": "^2.0.22",
+    "typescript": "^4.8.3"
   }
 }
