@@ -7,7 +7,7 @@
     gap-3
   >
     <NuxtLink i-carbon-campsite to="/" />
-    <a i-carbon-logo-github href="https://github.com/antfu/vitesse-nuxt3" target="_blank" />
+    <a i-carbon-logo-github href="https://github.com/mjkodkks/openqr" target="_blank" />
     <DarkToggle />
   </div>
 </template>
