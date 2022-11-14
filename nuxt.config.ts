@@ -14,7 +14,4 @@ export default defineNuxtConfig({
   colorMode: {
     classSuffix: '',
   },
-  // build: {
-  //   transpile: ['vue-advanced-cropper'],
-  // },
 })
