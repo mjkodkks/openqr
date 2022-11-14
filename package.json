@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.4",
-    "cropperjs": "^1.5.12"
+    "jsqr": "^1.4.0",
+    "vue-advanced-cropper": "^2.8.6"
   }
 }

@@ -6,7 +6,8 @@ import {
   TransitionChild,
   TransitionRoot,
 } from '@headlessui/vue'
-import type Cropper from 'cropperjs'
+import { Cropper } from 'vue-advanced-cropper'
+import 'vue-advanced-cropper/dist/style.css'
 
 interface IProps {
   isOpen: boolean
@@ -14,7 +15,8 @@ interface IProps {
 }
 
 const { isOpen = false, image = '' } = defineProps<IProps>()
-const emit = defineEmits(['update:isOpen'])
+const emit = defineEmits(['update:isOpen', 'onCropUploaded'])
+const imagetoScan = ref<string>('')
 
 function closeModal() {
   emit('update:isOpen', false)
@@ -22,12 +24,15 @@ function closeModal() {
 function openModal() {
   emit('update:isOpen', true)
 }
-
-let cropper: Cropper
-const imageRef = ref<HTMLImageElement | null>(null)
+function uploadCrop() {
+  emit('onCropUploaded', imagetoScan.value)
+  closeModal()
+}
+function cropSuccess({ coordinates, canvas }) {
+  imagetoScan.value = canvas.toDataURL()
+}
 
 onMounted(() => {
-  console.log(imageRef.value)
 })
 </script>
 
@@ -69,21 +74,23 @@ onMounted(() => {
                 Crop Your QR Code
               </DialogTitle>
               <div class="mt-2">
-                <p class="text-sm text-gray-500">
-                  preview
-                </p>
-                <div>
-                  <img ref="imageRef" :src="image">
-                </div>
+                <Cropper
+                  :src="image"
+                  :stencil-props="{
+                    minAspectRatio: 1 / 1,
+                    maxAspectRatio: 16 / 8,
+                  }"
+                  @change="cropSuccess"
+                />
               </div>
 
               <div class="mt-4">
                 <button
                   type="button"
                   class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                  @click="closeModal"
+                  @click="uploadCrop"
                 >
-                  Got it, thanks!
+                  Scan QR Code 😚
                 </button>
               </div>
             </DialogPanel>
