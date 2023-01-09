@@ -4,7 +4,7 @@ import jsQR from 'jsqr'
 import { useMainStore } from '~~/store/main'
 
 const mainStore = useMainStore()
-const fileBase64 = ref<string>()
+const fileBase64 = ref<string>('')
 const fileBase64Crop = ref<string>()
 const showScannerLine = ref(true)
 
@@ -26,6 +26,12 @@ function onCropUploaded(e: string) {
     scannQRCode()
   }, 2.5 * 1000)
 }
+
+// check and clear state dialog closed
+mainStore.$subscribe((mutation, state) => {
+  if (state.dialogCrop === false)
+    fileBase64.value = ''
+})
 
 function removeImage() {
   showScannerLine.value = true

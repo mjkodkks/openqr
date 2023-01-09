@@ -26,4 +26,9 @@ html.dark {
   background: #222;
   color: white;
 }
+
+.cropper {
+  height: 600px;
+  background: #DDD;
+}
 </style>

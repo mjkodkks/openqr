@@ -18,22 +18,30 @@ const { isOpen = false, image = '' } = defineProps<IProps>()
 const emit = defineEmits(['update:isOpen', 'onCropUploaded'])
 const imagetoScan = ref<string>('')
 
-function closeModal() {
+const cropperRefs = ref()
+
+function closeModal(isUpload?: boolean) {
+  if (isUpload)
+    emit('onCropUploaded', imagetoScan.value)
   emit('update:isOpen', false)
+  imagetoScan.value = ''
 }
 function openModal() {
   emit('update:isOpen', true)
 }
 function uploadCrop() {
-  emit('onCropUploaded', imagetoScan.value)
-  closeModal()
+  closeModal(true)
 }
-function cropSuccess({ coordinates, canvas }) {
+function cropSuccess({ canvas }: any) {
   imagetoScan.value = canvas.toDataURL()
 }
 
 onMounted(() => {
 })
+
+// watch(() => image, (current, prev) => {
+//   console.log(cropperRefs.value)
+// })
 </script>
 
 <template>
@@ -75,11 +83,8 @@ onMounted(() => {
               </DialogTitle>
               <div class="mt-2">
                 <Cropper
+                  ref="cropperRefs"
                   :src="image"
-                  :stencil-props="{
-                    minAspectRatio: 1 / 1,
-                    maxAspectRatio: 16 / 8,
-                  }"
                   @change="cropSuccess"
                 />
               </div>
