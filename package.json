@@ -14,7 +14,6 @@
     "@headlessui/vue": "^1.7.4",
     "@iconify-json/carbon": "^1.1.8",
     "@iconify-json/twemoji": "^1.1.5",
-    "@nuxtjs/color-mode": "^3.1.6",
     "@pinia/nuxt": "^0.4.2",
     "@unocss/nuxt": "^0.46.5",
     "@vueuse/nuxt": "^9.3.0",
