@@ -1,9 +1,22 @@
 <script setup>
 useHead({
-  title: 'Vitesse Nuxt 3',
+  title: 'OPENQR | Free online QR Code reader from image file',
   link: [
     {
-      rel: 'icon', type: 'image/png', href: '/nuxt.png',
+      rel: 'icon', type: 'image/icon', href: '/favicon.ico',
+    },
+    {
+      rel: 'manifest', href: '/manifest.json',
+    },
+  ],
+  meta: [
+    {
+      name: 'description', content: 'Free online QR Code scanner from images (QR scanner, QR Code reader from image online, QR Code scanner online, how to scan a qr code from image)',
+    },
+  ],
+  script: [
+    {
+      src: '/install-sw.js', async: true, defer: true,
     },
   ],
 })
