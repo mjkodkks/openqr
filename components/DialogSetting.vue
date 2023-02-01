@@ -6,45 +6,46 @@ import {
   TransitionChild,
   TransitionRoot,
 } from '@headlessui/vue'
-import { Cropper } from 'vue-advanced-cropper'
-import 'vue-advanced-cropper/dist/style.css'
+import { useStorage } from '@vueuse/core'
 
 export interface IProps {
   isOpen?: boolean
-  image?: string
+  zoomBeforeScan?: boolean
 }
 
 const props = withDefaults(defineProps<IProps>(), {
   isOpen: false,
-  image: '',
 })
-const emit = defineEmits(['update:isOpen', 'onCropUploaded'])
-const imagetoScan = ref<string>('')
-const cropperRefs = ref()
+const emit = defineEmits(['update:isOpen'])
 
-function closeModal(isUpload?: boolean) {
-  if (isUpload)
-    emit('onCropUploaded', imagetoScan.value)
+const localStore = localStorage
+const setting = reactive({
+  zoomBeforeScan: false,
+})
 
+function closeModal() {
   emit('update:isOpen', false)
-  imagetoScan.value = ''
 }
 function openModal() {
   emit('update:isOpen', true)
 }
-function uploadCrop() {
-  closeModal(true)
+function save() {
+  closeModal()
+  localStorage.setItem('setting', JSON.stringify({ zoomBeforeScan: setting.zoomBeforeScan }))
 }
-function cropSuccess({ canvas }: any) {
-  imagetoScan.value = canvas.toDataURL()
+
+function getSettingConfig() {
+  if (localStorage.getItem('setting')) {
+    setting.zoomBeforeScan = JSON.parse(localStorage.getItem('setting') || '').zoomBeforeScan
+  }
+  else {
+    localStorage.setItem('setting', JSON.stringify({ zoomBeforeScan: false }))
+  }
 }
 
 onMounted(() => {
+  getSettingConfig()
 })
-
-// watch(() => image, (current, prev) => {
-//   console.log(cropperRefs.value)
-// })
 </script>
 
 <template>
@@ -68,19 +69,20 @@ onMounted(() => {
               class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
             >
               <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
-                Crop Your QR Code
+                Setting
               </DialogTitle>
-              <div class="mt-2">
-                <Cropper ref="cropperRefs" :src="image" @change="cropSuccess" />
+              <div class="mt-4 flex gap-4 items-center text-dark dark:text-gray-8">
+                <input id="setting_1" v-model="setting.zoomBeforeScan" type="checkbox" class="cursor-pointer">
+                <label for="setting_1" class="cursor-pointer">zoom image before scan</label>
               </div>
 
               <div class="mt-4">
                 <button
                   type="button"
                   class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                  @click="uploadCrop"
+                  @click="save"
                 >
-                  Scan QR Code 😚
+                  Save
                 </button>
               </div>
             </DialogPanel>

@@ -9,11 +9,18 @@ const fileBase64Crop = ref<string>()
 const showScannerLine = ref(true)
 
 function onFileDropped(e: any) {
-  mainStore.dialogCrop = true
+  // get zoom config
+  const useZoom: boolean = JSON.parse(localStorage.getItem('setting') || '').zoomBeforeScan || false
+  mainStore.dialogCrop = useZoom
   const reader = new FileReader()
   reader.onload = (img) => {
-    if (img && img.target)
+    if (img && img.target) {
       fileBase64.value = img.target.result as string
+      if (!useZoom) {
+        // fileBase64Crop.value = fileBase64.value
+        onCropUploaded(fileBase64.value)
+      }
+    }
   }
   reader.readAsDataURL(e)
 }
@@ -98,10 +105,18 @@ function isUrl(urlString: string) {
   catch (e) { return false }
   return url.protocol === 'http:' || url.protocol === 'https:'
 }
+
+const dialogSetting = ref(false)
+function openSetting() {
+  dialogSetting.value = true
+}
 </script>
 
 <template>
   <div>
+    <button class="fixed top-4 right-4 text-lg hover:text-lime transition-all duration-300" @click="openSetting">
+      <div class="i-mdi-cog" />
+    </button>
     <Suspense>
       <Upload @files-dropped="onFileDropped" />
       <template #fallback>
@@ -111,7 +126,7 @@ function isUrl(urlString: string) {
       </template>
     </Suspense>
     <div v-if="fileBase64Crop" class="flex justify-center mt-4 ">
-      <div class="relative w-[400px] h-[400px] bg-gray-50 dark:bg-gray-700">
+      <div class="relative w-[400px] h-[400px] bg-gray-400 dark:bg-gray-700">
         <button class="absolute top-4 right-4" @click="removeImage">
           <div class="i-carbon-close-filled" />
         </button>
@@ -120,9 +135,14 @@ function isUrl(urlString: string) {
       </div>
     </div>
     <div v-if="link" class="mt-4 flex justify-center">
-      <textarea v-model="link" rows="4" cols="40" class="block p-2.5 w-[400px] text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message..." />
+      <textarea
+        v-model="link" rows="4" cols="40"
+        class="block p-2.5 w-[400px] text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        placeholder="Your message..."
+      />
     </div>
     <DialogCropImage v-model:is-open="mainStore.dialogCrop" :image="fileBase64" @on-crop-uploaded="onCropUploaded" />
+    <DialogSetting v-model:is-open="dialogSetting" />
   </div>
 </template>
 
@@ -130,10 +150,12 @@ function isUrl(urlString: string) {
 .scanner-animation {
   animation: scanner 2.5s;
 }
+
 @keyframes scanner {
   from {
     transform: translateY(0%)
   }
+
   to {
     transform: translateY(400px)
   }
