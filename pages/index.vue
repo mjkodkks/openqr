@@ -1,12 +1,24 @@
 <script setup lang="ts">
 import type { QRCode } from 'jsqr'
 import jsQR from 'jsqr'
+import { useDropZone } from '@vueuse/core'
 import { useMainStore } from '~~/store/main'
 
 const mainStore = useMainStore()
 const fileBase64 = ref<string>('')
 const fileBase64Crop = ref<string>()
 const showScannerLine = ref(true)
+
+const dropZoneRef = ref(document.getElementById('__nuxt'))
+
+function onDrop(files: File[] | null) {
+  console.log('🚀 ~ file: index.vue:15 ~ onDrop ~ onDrop')
+  if (files?.length) {
+    onFileDropped(files[0])
+  }
+}
+
+const { isOverDropZone } = useDropZone(dropZoneRef, onDrop)
 
 function onFileDropped(e: any) {
   // get zoom config
@@ -125,16 +137,25 @@ function openSetting() {
         </div>
       </template>
     </Suspense>
-    <div v-if="fileBase64Crop" class="flex justify-center mt-4 ">
-      <div class="relative w-[400px] h-[400px] bg-gray-400 dark:bg-gray-700">
-        <button class="absolute top-4 right-4" @click="removeImage">
-          <div class="i-carbon-close-filled" />
+    <div v-if="fileBase64Crop" class="flex justify-center mt-4 flex-col items-center z-1">
+      <div class="relative w-[400px] h-[400px] bg-gray-400 dark:bg-gray-700 flex items-center">
+        <button class="absolute top-4 right-4 shadow-xl mt-[-1.5rem] mr-[-1.5rem] rounded-full bg-white" @click="removeImage">
+          <div class="i-carbon-close-filled text-2xl text-blue-400" />
         </button>
         <div v-show="showScannerLine" class="w-full h-1 bg-red-400 absolute top-0 scanner-animation" />
         <img class="w-[100%] border border-gray-300 rounded-2xl" :src="fileBase64Crop" alt="fileBase64Crop">
       </div>
+      <div v-if="fileBase64Crop" class="mt-4 flex justify-center">
+        <button
+          type="button"
+          class="flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+          @click="removeImage"
+        >
+          Clear 🗑
+        </button>
+      </div>
     </div>
-    <div v-if="link" class="mt-4 flex justify-center">
+    <div v-if="link" class="mt-4 flex justify-center z-1">
       <textarea
         v-model="link" rows="4" cols="40"
         class="block p-2.5 w-[400px] text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -143,6 +164,7 @@ function openSetting() {
     </div>
     <DialogCropImage v-model:is-open="mainStore.dialogCrop" :image="fileBase64" @on-crop-uploaded="onCropUploaded" />
     <DialogSetting v-model:is-open="dialogSetting" />
+    <DropZoneOverlay v-if="isOverDropZone" />
   </div>
 </template>
 

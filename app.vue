@@ -11,7 +11,7 @@ useHead({
   ],
   meta: [
     {
-      name: 'description', content: 'Free online QR Code scanner from images (QR scanner, QR Code reader from image online, QR Code scanner online, how to scan a qr code from image)',
+      name: 'description', content: 'Free online QR Code scanner from images (QR scanner, QR Code reader from image online, QR Code scanner online, how to scan a qr code from image), ค้นหา QR Code จากรูป ฟรี, เปิด QR Code ฟรี',
     },
   ],
   script: [

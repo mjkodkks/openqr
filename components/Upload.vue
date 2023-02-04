@@ -26,7 +26,7 @@ function upload(e: any) {
 <template>
   <div>
     <button class="border border-dashed border-gray-400 pa-4 rounded-md" @click="clickUpload">
-      Upload Your QR Code image Here :D
+      Upload Your QR Code image Here <br> Or Drag and Drop
     </button>
     <input v-show="showInput" ref="uploadRef" type="file" accept="image/*" @change="upload">
   </div>
