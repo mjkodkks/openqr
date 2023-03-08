@@ -11,6 +11,9 @@ export default defineNuxtConfig({
   experimental: {
     // reactivityTransform: true,
   },
+  devServer: {
+    port: 3000,
+  },
   unocss: {
     preflight: true,
     presets: [
