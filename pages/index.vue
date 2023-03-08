@@ -125,7 +125,7 @@ function openSetting() {
 </script>
 
 <template>
-  <div>
+  <div class="relative">
     <button class="fixed top-4 right-4 text-lg hover:text-lime transition-all duration-300" @click="openSetting">
       <div class="i-mdi-cog" />
     </button>
@@ -138,12 +138,9 @@ function openSetting() {
       </template>
     </Suspense>
     <div v-if="fileBase64Crop" class="flex justify-center mt-4 flex-col items-center z-1">
-      <div class="relative w-[400px] h-[400px] bg-gray-400 dark:bg-gray-700 flex items-center">
-        <button class="absolute top-4 right-4 shadow-xl mt-[-1.5rem] mr-[-1.5rem] rounded-full bg-white" @click="removeImage">
-          <div class="i-carbon-close-filled text-2xl text-blue-400" />
-        </button>
+      <div class="relative w-[400px] h-[400px] overflow-hidden bg-gray-400 dark:bg-gray-700 flex items-center">
         <div v-show="showScannerLine" class="w-full h-1 bg-red-400 absolute top-0 scanner-animation" />
-        <img class="w-[100%] border border-gray-300 rounded-2xl" :src="fileBase64Crop" alt="fileBase64Crop">
+        <img class="w-[100%] border border-gray-300 rounded-2xl object-contain aspect-square" :src="fileBase64Crop" alt="fileBase64Crop">
       </div>
       <div v-if="fileBase64Crop" class="mt-4 flex justify-center">
         <button

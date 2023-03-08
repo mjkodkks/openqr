@@ -18,7 +18,6 @@ const props = withDefaults(defineProps<IProps>(), {
 })
 const emit = defineEmits(['update:isOpen'])
 
-const localStore = localStorage
 const setting = reactive({
   zoomBeforeScan: false,
 })
